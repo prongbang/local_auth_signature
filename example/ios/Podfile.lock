@@ -1,0 +1,29 @@
+PODS:
+  - Flutter (1.0.0)
+  - local_auth_signature (1.0.0):
+    - Flutter
+    - SignatureBiometricSwift (~> 1.0.4)
+  - SignatureBiometricSwift (1.0.4)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - local_auth_signature (from `.symlinks/plugins/local_auth_signature/ios`)
+
+SPEC REPOS:
+  trunk:
+    - SignatureBiometricSwift
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  local_auth_signature:
+    :path: ".symlinks/plugins/local_auth_signature/ios"
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  local_auth_signature: 1f9d16c5c8d18f285fc8a571212a1aabd3f029d3
+  SignatureBiometricSwift: d743e1226e12a02d9a33a5e5dfe6ccbf0aa659a6
+
+PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
+
+COCOAPODS: 1.11.3

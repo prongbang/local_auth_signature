@@ -1,3 +1,3 @@
-## 0.0.1
+## 1.0.0
 
-* TODO: Describe initial release.
+* Generate key pair and signing using Local Authentication for Android and iOS.

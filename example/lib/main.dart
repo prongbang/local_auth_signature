@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
 import 'package:flutter/services.dart';
 import 'package:local_auth_signature/local_auth_signature.dart';
+import 'package:local_auth_signature_example/card_box.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,35 +15,74 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _localAuthSignaturePlugin = LocalAuthSignature();
+  final _localAuthSignature = LocalAuthSignature.instance;
+  final _key = 'com.prongbang.signx.key';
+  final _payload = 'Hello';
+  String? _publicKey = '';
+  String? _signature = '';
+  String? _verified = '';
 
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
+  void _createKeyPair() async {
+    try {
+      final publicKey = await _localAuthSignature.createKeyPair(
+        _key,
+        AndroidPromptInfo(
+          title: 'BIOMETRIC',
+          subtitle: 'Please allow biometric',
+          negativeButton: 'CANCEL',
+        ),
+        IOSPromptInfo(reason: 'Please allow biometric'),
+      );
+      setState(() {
+        _publicKey = publicKey;
+      });
+      print('publicKey: $publicKey');
+    } on PlatformException catch (e) {
+      print('PlatformException: ${e.code}');
+    }
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
+  void _sign() async {
     try {
-      platformVersion =
-          await _localAuthSignaturePlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+      final signature = await _localAuthSignature.sign(
+        _key,
+        _payload,
+        AndroidPromptInfo(
+          title: 'BIOMETRIC',
+          subtitle: 'Please allow biometric',
+          negativeButton: 'CANCEL',
+        ),
+        IOSPromptInfo(reason: 'Please allow biometric'),
+      );
+      setState(() {
+        _signature = signature;
+      });
+      print('signature: $signature');
+    } on PlatformException catch (e) {
+      print('PlatformException: ${e.code}');
     }
+  }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
+  void _verify() async {
+    try {
+      final verified = await _localAuthSignature.verify(
+        _key,
+        _payload,
+        _signature!,
+        AndroidPromptInfo(
+          title: 'BIOMETRIC',
+          subtitle: 'Please allow biometric',
+          negativeButton: 'CANCEL',
+        ),
+        IOSPromptInfo(reason: 'Please allow biometric'),
+      );
+      setState(() {
+        _verified = '$verified';
+      });
+      print('verified: $verified');
+    } on PlatformException catch (e) {
+      print('PlatformException: ${e.code}');
+    }
   }
 
   @override
@@ -54,8 +92,40 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                const Text('PublicKey'),
+                const SizedBox(height: 16),
+                CardBox(child: Text('$_publicKey')),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _createKeyPair,
+                  child: const Text('Create KeyPair'),
+                ),
+                const SizedBox(height: 16),
+                const Text('Signature'),
+                const SizedBox(height: 16),
+                CardBox(child: Text('$_signature')),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _sign,
+                  child: const Text('Sign'),
+                ),
+                const SizedBox(height: 16),
+                const Text('Verify'),
+                const SizedBox(height: 16),
+                CardBox(child: Text('$_verified')),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _verify,
+                  child: const Text('Verify'),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

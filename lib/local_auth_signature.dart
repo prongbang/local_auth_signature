@@ -4,6 +4,7 @@ import 'package:local_auth_signature/src/ios_prompt_info.dart';
 
 export 'src/android_prompt_info.dart';
 export 'src/ios_prompt_info.dart';
+export 'src/local_auth_signature_error.dart';
 
 abstract class LocalAuthSignature {
   LocalAuthSignature() : super();

@@ -1,10 +1,10 @@
 name: local_auth_signature
 description: Generate key pair and signing (NIST P-256 EC key pair using ECDSA) using Local Authentication for Android and iOS.
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/prongbang/local_auth_signature
 
 environment:
-  sdk: '>=2.18.2 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
   flutter: ">=2.5.0"
 
 dependencies:

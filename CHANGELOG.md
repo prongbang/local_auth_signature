@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Config min dart sdk to 2.12.0
+
 ## 1.0.1
 
 * Update information

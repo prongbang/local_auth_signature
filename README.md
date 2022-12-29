@@ -2,7 +2,7 @@
 
 [![pub package](https://img.shields.io/pub/v/local_auth_signature.svg)](https://pub.dartlang.org/packages/local_auth_signature)
 
-Android and iOS devices to allow Local Authentication + Cryptography via Biometric.
+Generate key pair and signing (NIST P-256 EC key pair using ECDSA) using Local Authentication for Android and iOS.
 
 ![Screenshot](screenshot/screenshot.jpg)
 

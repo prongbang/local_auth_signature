@@ -2,8 +2,8 @@ PODS:
   - Flutter (1.0.0)
   - local_auth_signature (1.0.0):
     - Flutter
-    - SignatureBiometricSwift (~> 1.0.5)
-  - SignatureBiometricSwift (1.0.5)
+    - SignatureBiometricSwift (~> 1.0.6)
+  - SignatureBiometricSwift (1.0.6)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -21,8 +21,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  local_auth_signature: a1c61420f1f67f11071b8bc19ccf3666672e4283
-  SignatureBiometricSwift: 954d1d2625c4ce7f69a8d6792a0a82e7017faf64
+  local_auth_signature: 733566170b5fee75709761f770801671c91daf9f
+  SignatureBiometricSwift: 7447bcee210b0ace2d28ea9e564638ebe6de6bd6
 
 PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
 

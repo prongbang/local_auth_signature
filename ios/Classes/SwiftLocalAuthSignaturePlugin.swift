@@ -51,7 +51,7 @@ public class SwiftLocalAuthSignaturePlugin: NSObject, FlutterPlugin {
             let keyConfig = KeyConfig(name: key)
             let signatureBiometricManager = LocalSignatureBiometricManager.newInstance(keyConfig: keyConfig)
             signatureBiometricManager.createKeyPair(reason: reason) { value in
-                if value.status == "success" {
+                if value.status == SignatureBiometricStatus.success {
                     result(value.publicKey)
                 } else {
                     result(
@@ -79,11 +79,31 @@ public class SwiftLocalAuthSignaturePlugin: NSObject, FlutterPlugin {
             
             let keyConfig = KeyConfig(name: key)
             let signatureBiometricManager = LocalSignatureBiometricManager.newInstance(keyConfig: keyConfig)
-            signatureBiometricManager.sign(payload: payload) { signature in
-                result(signature)
+            signatureBiometricManager.sign(payload: payload) { value in
+                if value.status == SignatureBiometricStatus.success {
+                    result(value.signature)
+                } else {
+                    result(
+                        FlutterError(
+                            code: value.status,
+                            message: "Error is \(value.status)",
+                            details: nil
+                        )
+                    )
+                }
             }
             break
         case SwiftLocalAuthSignatureMethod.Verify:
+            guard let reason = args[SwiftLocalAuthSignatureArgs.Reason] else {
+                result(
+                    FlutterError(
+                        code: SwiftLocalAuthSignatureError.ReasonIsNull,
+                        message: "Reason is null",
+                        details: nil
+                    )
+                )
+                return
+            }
             guard let payload = args[SwiftLocalAuthSignatureArgs.Payload] else {
                 result(
                     FlutterError(
@@ -107,8 +127,18 @@ public class SwiftLocalAuthSignaturePlugin: NSObject, FlutterPlugin {
             
             let keyConfig = KeyConfig(name: key)
             let signatureBiometricManager = LocalSignatureBiometricManager.newInstance(keyConfig: keyConfig)
-            signatureBiometricManager.verify(payload: payload, signature: signature) { verified in
-                result(verified)
+            signatureBiometricManager.verify(reason: reason, payload: payload, signature: signature) { value in
+                if value.status == SignatureBiometricStatus.success {
+                    result(value.verified)
+                } else {
+                    result(
+                        FlutterError(
+                            code: value.status,
+                            message: "Error is \(value.status)",
+                            details: nil
+                        )
+                    )
+                }
             }
             break
         default:

@@ -1,3 +1,7 @@
+## 1.0.7
+
+* Update dependencies android-biometric-signature to 1.0.5
+
 ## 1.0.6
 
 * Configure Dart with a minimum SDK version of 2.18.0

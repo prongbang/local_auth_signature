@@ -1,3 +1,7 @@
+## 1.0.6
+
+* Configure Dart with a minimum SDK version of 2.18.0
+
 ## 1.0.5
 
 * Fix the bug where users cannot sign in after resetting Face ID and setting up a new Face ID on iOS

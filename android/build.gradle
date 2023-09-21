@@ -27,7 +27,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -48,5 +48,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.prongbang:android-biometric-signature:1.0.3'
+    implementation 'com.github.prongbang:android-biometric-signature:1.0.4'
 }

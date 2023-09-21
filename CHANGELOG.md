@@ -1,3 +1,7 @@
+## 1.0.5
+
+* Fix the bug where users cannot sign in after resetting Face ID and setting up a new Face ID on iOS
+
 ## 1.0.4
 
 * Update dependencies android-biometric-signature to 1.0.4

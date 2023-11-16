@@ -107,6 +107,22 @@ class MainActivity : FlutterFragmentActivity()
 <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 ```
 
+- Add jitpack maven repositories in `build.gradle`
+
+```groovy
+buildscript {
+    repositories {
+        maven { url "https://jitpack.io" }
+    }
+}
+
+allprojects {
+    repositories {
+        maven { url "https://jitpack.io" }
+    }
+}
+```
+
 ### iOS
 
 - Add privacy in `info.plist` file

@@ -49,4 +49,8 @@ abstract class LocalAuthSignature {
   ) {
     throw UnimplementedError('verify() has not been implemented.');
   }
+
+  Future<String?> keyChanged(String key, String pk) {
+    throw UnimplementedError('keyChanged() has not been implemented.');
+  }
 }

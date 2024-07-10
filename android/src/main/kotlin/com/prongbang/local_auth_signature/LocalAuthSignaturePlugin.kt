@@ -1,10 +1,13 @@
 package com.prongbang.local_auth_signature
 
+import android.os.Build
 import androidx.annotation.NonNull
 import androidx.fragment.app.FragmentActivity
 import com.prongbang.biometricsignature.Biometric
 import com.prongbang.biometricsignature.SignatureBiometricPromptManager
+import com.prongbang.biometricsignature.extensions.toBase64
 import com.prongbang.biometricsignature.key.KeyStoreAliasKey
+import com.prongbang.biometricsignature.keypair.BiometricKeyStoreManager
 import com.prongbang.biometricsignature.signature.BiometricSignature
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -20,6 +23,7 @@ class LocalAuthSignaturePlugin : FlutterPlugin, MethodCallHandler, ActivityAware
 
     private lateinit var channel: MethodChannel
     private var activity: FragmentActivity? = null
+    private val biometricKeyStoreManager by lazy { BiometricKeyStoreManager() }
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "local_auth_signature")
@@ -28,6 +32,37 @@ class LocalAuthSignaturePlugin : FlutterPlugin, MethodCallHandler, ActivityAware
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         when (call.method) {
+            LocalAuthSignatureMethod.KEY_CHANGED -> {
+                val bioKey = call.argument<String?>(LocalAuthSignatureArgs.BIO_KEY)
+                if (bioKey == null) {
+                    result.error(LocalAuthSignatureError.KEY_IS_NULL, "Key is null", null)
+                    return
+                }
+                val bioPk = call.argument<String?>(LocalAuthSignatureArgs.BIO_PK)
+                if (bioPk == null) {
+                    result.error(LocalAuthSignatureError.PK_IS_NULL, "Pk is null", null)
+                    return
+                }
+                if (activity == null) {
+                    result.error(
+                        LocalAuthSignatureError.NO_FRAGMENT_ACTIVITY,
+                        "FragmentActivity is null",
+                        null
+                    )
+                    return
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    val publicKey = biometricKeyStoreManager.getPublicKey(key = bioKey)
+                    android.util.Log.i("X", "${publicKey.toBase64()} == $bioPk")
+                    if (publicKey.toBase64() == bioPk) {
+                        result.success("unchanged")
+                    } else {
+                        result.success("changed")
+                    }
+                } else {
+                    result.success("sdk-unsupported")
+                }
+            }
             LocalAuthSignatureMethod.CREATE_KEYPAIR -> {
                 val bioKey = call.argument<String?>(LocalAuthSignatureArgs.BIO_KEY)
                 if (bioKey == null) {

@@ -86,4 +86,12 @@ class MethodChannelLocalAuthSignature extends LocalAuthSignature {
         }) ??
         false;
   }
+
+  @override
+  Future<String?> keyChanged(String key, String pk) async {
+    return await methodChannel.invokeMethod<String>('keyChanged', {
+      'key': key,
+      'pk': pk,
+    });
+  }
 }

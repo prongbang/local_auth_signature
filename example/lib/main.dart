@@ -19,8 +19,17 @@ class _MyAppState extends State<MyApp> {
   final _key = 'com.prongbang.signx.key';
   final _payload = 'Hello';
   String? _publicKey = '';
+  String? _cachePublicKey = '';
+  String? _keyChanged = '';
   String? _signature = '';
   String? _verified = '';
+
+  void _checkKeyChanged() async {
+    final result = await _localAuthSignature.keyChanged(_key, _cachePublicKey!);
+    setState(() {
+      _keyChanged = result;
+    });
+  }
 
   void _createKeyPair() async {
     try {
@@ -33,6 +42,9 @@ class _MyAppState extends State<MyApp> {
         ),
         IOSPromptInfo(reason: 'Please allow biometric'),
       );
+      if (_cachePublicKey?.isEmpty ?? true) {
+        _cachePublicKey = publicKey;
+      }
       setState(() {
         _publicKey = publicKey;
       });
@@ -104,6 +116,14 @@ class _MyAppState extends State<MyApp> {
                 ElevatedButton(
                   onPressed: _createKeyPair,
                   child: const Text('Create KeyPair'),
+                ),
+                const Text('KeyChanged'),
+                const SizedBox(height: 16),
+                CardBox(child: Text('$_keyChanged')),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _checkKeyChanged,
+                  child: const Text('Check Key Changed'),
                 ),
                 const SizedBox(height: 16),
                 const Text('Signature'),

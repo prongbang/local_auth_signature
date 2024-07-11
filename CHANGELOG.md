@@ -1,3 +1,9 @@
+## 1.0.8
+
+* Update dependencies android-biometric-signature to 1.0.6
+* Update dependencies SignatureBiometricSwift to 1.0.9
+* Add function check key changed
+
 ## 1.0.7
 
 * Update dependencies android-biometric-signature to 1.0.5

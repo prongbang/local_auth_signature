@@ -11,7 +11,7 @@ Generate key pair and signing (NIST P-256 EC key pair using ECDSA) using Local A
 It is really easy to use! You should ensure that you add the `local_auth_signature` as a dependency in your flutter project.
 
 ```yaml
-local_auth_signature: "^1.0.7"
+local_auth_signature: "^1.0.8"
 ```
 
 ## Usage
@@ -28,6 +28,12 @@ final _localAuthSignature = LocalAuthSignature.instance;
 
 ```dart
 final _key = 'com.prongbang.signx.key';
+```
+
+#### Key Changed
+
+```dart
+final status = await _localAuthSignature.keyChanged(_key, publicKey);
 ```
 
 #### Create KeyPair

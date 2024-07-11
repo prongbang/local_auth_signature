@@ -1,10 +1,12 @@
 import 'package:local_auth_signature/local_auth_signature_method_channel.dart';
 import 'package:local_auth_signature/src/android_prompt_info.dart';
 import 'package:local_auth_signature/src/ios_prompt_info.dart';
+import 'package:local_auth_signature/src/key_changed_status.dart';
 
 export 'src/android_prompt_info.dart';
 export 'src/ios_prompt_info.dart';
 export 'src/local_auth_signature_error.dart';
+export 'src/key_changed_status.dart';
 
 abstract class LocalAuthSignature {
   LocalAuthSignature() : super();
@@ -21,6 +23,10 @@ abstract class LocalAuthSignature {
   /// they register themselves.
   static set instance(LocalAuthSignature instance) {
     _instance = instance;
+  }
+
+  Future<KeyChangedStatus?> keyChanged(String key, String pk) {
+    throw UnimplementedError('keyChanged() has not been implemented.');
   }
 
   Future<String?> createKeyPair(

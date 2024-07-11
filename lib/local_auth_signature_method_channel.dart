@@ -11,6 +11,22 @@ class MethodChannelLocalAuthSignature extends LocalAuthSignature {
   final methodChannel = const MethodChannel('local_auth_signature');
 
   @override
+  Future<KeyChangedStatus?> keyChanged(String key, String pk) async {
+    final status = await methodChannel.invokeMethod<String>('keyChanged', {
+      'key': key,
+      'pk': pk,
+    });
+    if (status == 'changed') {
+      return KeyChangedStatus.changed;
+    } else if (status == 'unchanged') {
+      return KeyChangedStatus.unchanged;
+    } else if (status == 'sdk-unsupported') {
+      return KeyChangedStatus.sdkUnsupported;
+    }
+    return null;
+  }
+
+  @override
   Future<String?> createKeyPair(
     String key,
     AndroidPromptInfo androidPromptInfo,
@@ -29,6 +45,8 @@ class MethodChannelLocalAuthSignature extends LocalAuthSignature {
       'subtitle': androidPromptInfo.subtitle,
       'description': androidPromptInfo.description,
       'negativeButton': androidPromptInfo.negativeButton,
+      'invalidatedByBiometricEnrollment':
+          androidPromptInfo.invalidatedByBiometricEnrollment,
     });
   }
 
@@ -54,6 +72,8 @@ class MethodChannelLocalAuthSignature extends LocalAuthSignature {
       'subtitle': androidPromptInfo.subtitle,
       'description': androidPromptInfo.description,
       'negativeButton': androidPromptInfo.negativeButton,
+      'invalidatedByBiometricEnrollment':
+          androidPromptInfo.invalidatedByBiometricEnrollment,
     });
   }
 
@@ -83,6 +103,8 @@ class MethodChannelLocalAuthSignature extends LocalAuthSignature {
           'subtitle': androidPromptInfo.subtitle,
           'description': androidPromptInfo.description,
           'negativeButton': androidPromptInfo.negativeButton,
+          'invalidatedByBiometricEnrollment':
+              androidPromptInfo.invalidatedByBiometricEnrollment,
         }) ??
         false;
   }

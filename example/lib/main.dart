@@ -30,6 +30,7 @@ class _MyAppState extends State<MyApp> {
           title: 'BIOMETRIC',
           subtitle: 'Please allow biometric',
           negativeButton: 'CANCEL',
+          invalidatedByBiometricEnrollment: true,
         ),
         IOSPromptInfo(reason: 'Please allow biometric'),
       );
@@ -51,6 +52,7 @@ class _MyAppState extends State<MyApp> {
           title: 'BIOMETRIC',
           subtitle: 'Please allow biometric',
           negativeButton: 'CANCEL',
+          invalidatedByBiometricEnrollment: true,
         ),
         IOSPromptInfo(reason: 'Please allow biometric'),
       );
@@ -73,6 +75,7 @@ class _MyAppState extends State<MyApp> {
           title: 'BIOMETRIC',
           subtitle: 'Please allow biometric',
           negativeButton: 'CANCEL',
+          invalidatedByBiometricEnrollment: true,
         ),
         IOSPromptInfo(reason: 'Please allow biometric'),
       );

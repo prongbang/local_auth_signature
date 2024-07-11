@@ -9,6 +9,7 @@ import Foundation
 
 class SwiftLocalAuthSignatureArgs {
     static let Key = "key"
+    static let Pk = "pk"
     static let Reason = "reason"
     static let Payload = "payload"
     static let Signature = "signature"

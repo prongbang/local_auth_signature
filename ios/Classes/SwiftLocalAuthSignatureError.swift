@@ -11,6 +11,7 @@ class SwiftLocalAuthSignatureError {
     static let ArgsIsNull = "ArgsIsNull"
     static let ReasonIsNull = "ReasonIsNull"
     static let KeyIsNull = "KeyIsNull"
+    static let PkIsNull = "PkIsNull"
     static let PayloadIsNull = "PayloadIsNull"
     static let SignatureIsNull = "SignatureIsNull"
     static let NoFragmentActivity = "NoFragmentActivity"

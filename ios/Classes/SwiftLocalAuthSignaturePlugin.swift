@@ -36,6 +36,32 @@ public class SwiftLocalAuthSignaturePlugin: NSObject, FlutterPlugin {
         }
         
         switch call.method {
+        case SwiftLocalAuthSignatureMethod.KeyChanged:
+            guard let pk = args[SwiftLocalAuthSignatureArgs.Pk] else {
+                result(
+                    FlutterError(
+                        code: SwiftLocalAuthSignatureError.PkIsNull,
+                        message: "Pk is null",
+                        details: nil
+                    )
+                )
+                return
+            }
+            
+            let keyConfig = KeyConfig(name: key)
+            let keychainManager = KeychainAccessManager()
+            let keyManager = KeyPairManager(keyConfig: keyConfig, keychainManager: keychainManager)
+            
+            let keyPair = keyManager.get()
+            let newPk = keyPair?.publicKey?.toBase64()
+            
+            if pk != newPk {
+                result("changed")
+            } else {
+                result("unchanged")
+            }
+            
+            break
         case SwiftLocalAuthSignatureMethod.CreateKeyPair:
             guard let reason = args[SwiftLocalAuthSignatureArgs.Reason] else {
                 result(

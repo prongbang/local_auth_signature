@@ -1,3 +1,7 @@
+## 1.0.9
+
+* Fix Unresolved reference: PK_IS_NULL
+
 ## 1.0.8
 
 * Update dependencies android-biometric-signature to 1.0.6

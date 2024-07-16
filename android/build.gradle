@@ -48,5 +48,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.prongbang:android-biometric-signature:1.0.6'
+    implementation 'com.github.prongbang:android-biometric-signature:1.0.7'
 }

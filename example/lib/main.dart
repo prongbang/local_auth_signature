@@ -16,11 +16,19 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _localAuthSignature = LocalAuthSignature.instance;
-  final _key = 'com.prongbang.signx.key';
+  final _key = 'com.prongbang.test.key';
   final _payload = 'Hello';
   String? _publicKey = '';
   String? _signature = '';
   String? _verified = '';
+  String? _status = '';
+
+  void _checkIsBiometricChanged() async {
+    final status = await _localAuthSignature.isBiometricChanged(_key);
+    setState(() {
+      _status = status?.toString();
+    });
+  }
 
   void _createKeyPair() async {
     try {
@@ -107,6 +115,14 @@ class _MyAppState extends State<MyApp> {
                 ElevatedButton(
                   onPressed: _createKeyPair,
                   child: const Text('Create KeyPair'),
+                ),
+                const Text('Biometric Changed'),
+                const SizedBox(height: 16),
+                CardBox(child: Text('$_status')),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _checkIsBiometricChanged,
+                  child: const Text('Check Biometric Changed'),
                 ),
                 const SizedBox(height: 16),
                 const Text('Signature'),

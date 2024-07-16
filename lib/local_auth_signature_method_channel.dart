@@ -11,19 +11,13 @@ class MethodChannelLocalAuthSignature extends LocalAuthSignature {
   final methodChannel = const MethodChannel('local_auth_signature');
 
   @override
-  Future<KeyChangedStatus?> keyChanged(String key, String pk) async {
-    final status = await methodChannel.invokeMethod<String>('keyChanged', {
-      'key': key,
-      'pk': pk,
-    });
+  Future<KeyChangedStatus?> isBiometricChanged(String key) async {
+    final status = await methodChannel
+        .invokeMethod<String>('isBiometricChanged', {'key': key});
     if (status == 'changed') {
       return KeyChangedStatus.changed;
-    } else if (status == 'unchanged') {
-      return KeyChangedStatus.unchanged;
-    } else if (status == 'sdk-unsupported') {
-      return KeyChangedStatus.sdkUnsupported;
     }
-    return null;
+    return KeyChangedStatus.unchanged;
   }
 
   @override

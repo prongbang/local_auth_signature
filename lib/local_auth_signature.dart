@@ -25,8 +25,8 @@ abstract class LocalAuthSignature {
     _instance = instance;
   }
 
-  Future<KeyChangedStatus?> keyChanged(String key, String pk) {
-    throw UnimplementedError('keyChanged() has not been implemented.');
+  Future<KeyChangedStatus?> isBiometricChanged(String key) {
+    throw UnimplementedError('isBiometricChanged() has not been implemented.');
   }
 
   Future<String?> createKeyPair(

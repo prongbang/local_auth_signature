@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
 import SignatureBiometricSwift
+import LocalAuthentication
 
 public class SwiftLocalAuthSignaturePlugin: NSObject, FlutterPlugin {
     
@@ -10,6 +11,46 @@ public class SwiftLocalAuthSignaturePlugin: NSObject, FlutterPlugin {
         let channel = FlutterMethodChannel(name: "local_auth_signature", binaryMessenger: registrar.messenger())
         let instance = SwiftLocalAuthSignaturePlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
+    }
+    
+    func isBiometricChanged(name: String) -> Bool {
+        let context = LAContext()
+        var error: NSError?
+        
+        // Check if biometric authentication is available
+        guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
+            // Biometric authentication is not available
+            return true
+        }
+        
+        let tag = name.data(using: .utf8)!
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassKey,
+            kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
+            kSecAttrApplicationTag as String: tag,
+            kSecReturnRef as String: true,
+            kSecUseAuthenticationUI as String: kSecUseAuthenticationUIFail
+        ]
+        
+        var item: CFTypeRef?
+        let status = SecItemCopyMatching(query as CFDictionary, &item)
+        
+        switch status {
+        case errSecSuccess:
+            // Key exists and is accessible without authentication
+            return false
+        case errSecItemNotFound:
+            // Key doesn't exist anymore, biometrics likely changed
+            return true
+        case errSecUserCanceled, errSecAuthFailed:
+            // Key exists but requires authentication (which we've disabled)
+            // Biometrics are still valid
+            return false
+        default:
+            // Any other error suggests the key is not accessible, biometrics likely changed
+            print("Unexpected error checking biometric state: \(status)")
+            return true
+        }
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -36,26 +77,10 @@ public class SwiftLocalAuthSignaturePlugin: NSObject, FlutterPlugin {
         }
         
         switch call.method {
-        case SwiftLocalAuthSignatureMethod.KeyChanged:
-            guard let pk = args[SwiftLocalAuthSignatureArgs.Pk] else {
-                result(
-                    FlutterError(
-                        code: SwiftLocalAuthSignatureError.PkIsNull,
-                        message: "Pk is null",
-                        details: nil
-                    )
-                )
-                return
-            }
+        case SwiftLocalAuthSignatureMethod.isBiometricChanged:
             
-            let keyConfig = KeyConfig(name: key)
-            let keychainManager = KeychainAccessManager()
-            let keyManager = KeyPairManager(keyConfig: keyConfig, keychainManager: keychainManager)
-            
-            let keyPair = keyManager.get()
-            let newPk = keyPair?.publicKey?.toBase64()
-            
-            if pk != newPk {
+            let isChanged = isBiometricChanged(name: key)
+            if isChanged {
                 result("changed")
             } else {
                 result("unchanged")

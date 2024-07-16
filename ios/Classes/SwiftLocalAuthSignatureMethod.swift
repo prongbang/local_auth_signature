@@ -11,5 +11,5 @@ class SwiftLocalAuthSignatureMethod {
     static let CreateKeyPair = "createKeyPair"
     static let Sign = "sign"
     static let Verify = "verify"
-    static let KeyChanged = "keyChanged"
+    static let isBiometricChanged = "isBiometricChanged"
 }

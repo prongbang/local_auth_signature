@@ -1,3 +1,7 @@
+## 1.0.10
+
+* Add function isBiometricChanged
+
 ## 1.0.9
 
 * Fix Unresolved reference: PK_IS_NULL

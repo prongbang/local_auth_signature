@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
   final _key = 'com.prongbang.test.key';
   final _payload = 'Hello';
   String? _publicKey = '';
-  String? _signature = '';
+  String? _signature = 'MEUCIBIcOQng5BqDg9tOjayHDMPgiZT48bWJ0AzkSM0WGVcmAiEAkEGVzlZeJuJCz2IUnqJ/c1zzla1TErcnyU1nzkkN/dA=';
   String? _verified = '';
   String? _status = '';
 
@@ -42,6 +42,7 @@ class _MyAppState extends State<MyApp> {
         ),
         IOSPromptInfo(reason: 'Please allow biometric'),
       );
+      await _localAuthSignature.resetBiometricChanged();
       setState(() {
         _publicKey = publicKey;
       });

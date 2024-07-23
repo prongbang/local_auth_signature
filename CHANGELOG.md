@@ -1,3 +1,11 @@
+## 1.0.12
+
+* Check biometric changed for iOS
+
+## 1.0.11
+
+* Check has property namespace for Android
+
 ## 1.0.10
 
 * Add function isBiometricChanged

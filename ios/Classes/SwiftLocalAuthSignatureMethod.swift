@@ -12,4 +12,5 @@ class SwiftLocalAuthSignatureMethod {
     static let Sign = "sign"
     static let Verify = "verify"
     static let isBiometricChanged = "isBiometricChanged"
+    static let resetBiometricChanged = "resetBiometricChanged"
 }

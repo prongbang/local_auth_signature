@@ -29,6 +29,12 @@ abstract class LocalAuthSignature {
     throw UnimplementedError('isBiometricChanged() has not been implemented.');
   }
 
+  /// Supported for iOS only, do nothing when run on Android and return false always.
+  Future<bool> resetBiometricChanged() {
+    throw UnimplementedError(
+        'resetBiometricChanged() has not been implemented.');
+  }
+
   Future<String?> createKeyPair(
     String key,
     AndroidPromptInfo androidPromptInfo,

@@ -1,121 +1,76 @@
-# local_auth_signature
+# local_auth_signature 🔐
 
 [![pub package](https://img.shields.io/pub/v/local_auth_signature.svg)](https://pub.dartlang.org/packages/local_auth_signature)
+[![Flutter](https://img.shields.io/badge/Flutter-3.0+-blue.svg)](https://flutter.dev)
+[![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-green.svg)](https://flutter.dev/multi-platform)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Generate key pair and signing (NIST P-256 EC key pair using ECDSA) using Local Authentication for Android and iOS.
+> Generate key pairs and cryptographic signatures using NIST P-256 EC key pair with ECDSA, protected by biometric authentication for Flutter (Android & iOS).
 
 ![Screenshot](screenshot/screenshot.jpg)
 
-## Getting started
+## ✨ Features
 
-It is really easy to use! You should ensure that you add the `local_auth_signature` as a dependency in your flutter project.
+- 🔑 **Secure Key Generation** - Generate NIST P-256 EC key pairs
+- 🔒 **Biometric Protection** - Keys protected by fingerprint or Face ID
+- ✍️ **Digital Signatures** - Create and verify ECDSA signatures
+- 📱 **Cross-Platform** - Works on both Android and iOS
+- 🔄 **Biometric Change Detection** - Detect when biometric data changes
+- 💾 **Secure Storage** - Keys stored securely in platform keystore
+
+## 📦 Installation
+
+Add to your `pubspec.yaml`:
 
 ```yaml
-local_auth_signature: "^1.0.12"
+dependencies:
+  local_auth_signature: ^1.0.12
 ```
 
-## Usage
+Then run:
+```bash
+flutter pub get
+```
 
-### Flutter
+## 🚀 Quick Start
 
-#### New instance
+### 1. Import the Package
+
+```dart
+import 'package:local_auth_signature/local_auth_signature.dart';
+```
+
+### 2. Initialize
 
 ```dart
 final _localAuthSignature = LocalAuthSignature.instance;
+final _key = 'com.yourapp.signatureKey';
 ```
 
-#### Define Key
-
-```dart
-final _key = 'com.prongbang.signx.key';
-```
-
-#### Check Fingerprint or Biometric changed
-
-- Android, iOS
-
-```dart
-final status = await _localAuthSignature.isBiometricChanged(_key);
-```
-
-- iOS
-
-```dart
-await _localAuthSignature.resetBiometricChanged();
-```
+### 3. Generate Key Pair
 
 ```dart
 try {
-    final signature = await _localAuthSignature.sign(_key, androidPrompt, iosPrompt);
+  final publicKey = await _localAuthSignature.createKeyPair(
+    _key,
+    AndroidPromptInfo(
+      title: 'BIOMETRIC',
+      subtitle: 'Please allow biometric',
+      negativeButton: 'CANCEL',
+    ),
+    IOSPromptInfo(reason: 'Please allow biometric'),
+  );
+  print('Public Key: $publicKey');
 } on PlatformException catch (e) {
-  // TODO check from exception code
+  print('Error: ${e.code}');
 }
 ```
 
-#### Create KeyPair
+## 📱 Platform Setup
 
-```dart
-try {
-    final publicKey = await _localAuthSignature.createKeyPair(
-        _key,
-        AndroidPromptInfo(
-            title: 'BIOMETRIC',
-            subtitle: 'Please allow biometric',
-            negativeButton: 'CANCEL',
-        ),
-        IOSPromptInfo(reason: 'Please allow biometric'),
-    );
-    print('publicKey: $publicKey');
-} on PlatformException catch (e) {
-  print('PlatformException: ${e.code}');
-}
-```
+### 🤖 Android Setup
 
-#### Sign
-
-```dart
-final _payload = 'Hello';
-try {
-    final signature = await _localAuthSignature.sign(
-        _key,
-        _payload,
-        AndroidPromptInfo(
-            title: 'BIOMETRIC',
-            subtitle: 'Please allow biometric',
-            negativeButton: 'CANCEL',
-        ),
-        IOSPromptInfo(reason: 'Please allow biometric'),
-    );
-    print('signature: $signature');
-} on PlatformException catch (e) {
-  print('PlatformException: ${e.code}');
-}
-```
-
-#### Verify
-
-```dart
-try {
-    final verified = await _localAuthSignature.verify(
-        _key,
-        _payload,
-        _signature!,
-        AndroidPromptInfo(
-            title: 'BIOMETRIC',
-            subtitle: 'Please allow biometric',
-            negativeButton: 'CANCEL',
-        ),
-        IOSPromptInfo(reason: 'Please allow biometric'),
-    );
-    print('verified: $verified');
-} on PlatformException catch (e) {
-    print('PlatformException: ${e.code}');
-}
-```
-
-### Android
-
-- Update code in `MainActivity.kt` file
+1. Update `MainActivity.kt`:
 
 ```kotlin
 import io.flutter.embedding.android.FlutterFragmentActivity
@@ -123,13 +78,13 @@ import io.flutter.embedding.android.FlutterFragmentActivity
 class MainActivity : FlutterFragmentActivity()
 ```
 
-- Add use-permissions in `AndroidManifest.xml` file
+2. Add permissions to `AndroidManifest.xml`:
 
 ```xml
 <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 ```
 
-- Add jitpack maven repositories in `build.gradle`
+3. Add JitPack repository to `build.gradle`:
 
 ```groovy
 buildscript {
@@ -145,9 +100,9 @@ allprojects {
 }
 ```
 
-### iOS
+### 🍎 iOS Setup
 
-- Add privacy in `info.plist` file
+Add to your `Info.plist`:
 
 ```xml
 <dict>
@@ -155,3 +110,168 @@ allprojects {
   <string>This application wants to access your TouchID or FaceID</string>
 </dict>
 ```
+
+## 📚 API Reference
+
+### Biometric Changes
+
+#### Check if Biometrics Changed
+```dart
+final bool hasChanged = await _localAuthSignature.isBiometricChanged(_key);
+```
+
+#### Reset Biometric Status (iOS only)
+```dart
+await _localAuthSignature.resetBiometricChanged();
+```
+
+### Key Management
+
+#### Create Key Pair
+```dart
+final String publicKey = await _localAuthSignature.createKeyPair(
+  keyName,
+  androidPrompt,
+  iosPrompt,
+);
+```
+
+#### Sign Data
+```dart
+final String signature = await _localAuthSignature.sign(
+  keyName,
+  payload,
+  androidPrompt,
+  iosPrompt,
+);
+```
+
+#### Verify Signature
+```dart
+final bool isValid = await _localAuthSignature.verify(
+  keyName,
+  payload,
+  signature,
+  androidPrompt,
+  iosPrompt,
+);
+```
+
+## 💡 Complete Example
+
+```dart
+class BiometricSignature {
+  final _localAuthSignature = LocalAuthSignature.instance;
+  final _key = 'com.yourapp.biometric.key';
+  final _payload = 'Hello, World!';
+  
+  Future<void> demonstrateSignature() async {
+    try {
+      // Check if biometrics changed
+      final changed = await _localAuthSignature.isBiometricChanged(_key);
+      if (changed) {
+        // Handle biometric enrollment changes
+        print('Biometrics have changed!');
+      }
+      
+      // Create key pair
+      final publicKey = await _localAuthSignature.createKeyPair(
+        _key,
+        AndroidPromptInfo(
+          title: 'Create Key',
+          subtitle: 'Authenticate to create secure key',
+          negativeButton: 'Cancel',
+        ),
+        IOSPromptInfo(reason: 'Authenticate to create secure key'),
+      );
+      print('Public Key: $publicKey');
+      
+      // Sign data
+      final signature = await _localAuthSignature.sign(
+        _key,
+        _payload,
+        AndroidPromptInfo(
+          title: 'Sign Data',
+          subtitle: 'Authenticate to sign',
+          negativeButton: 'Cancel',
+        ),
+        IOSPromptInfo(reason: 'Authenticate to sign'),
+      );
+      print('Signature: $signature');
+      
+      // Verify signature
+      final verified = await _localAuthSignature.verify(
+        _key,
+        _payload,
+        signature,
+        AndroidPromptInfo(
+          title: 'Verify Signature',
+          subtitle: 'Authenticate to verify',
+          negativeButton: 'Cancel',
+        ),
+        IOSPromptInfo(reason: 'Authenticate to verify'),
+      );
+      print('Verified: $verified');
+      
+    } on PlatformException catch (e) {
+      handleError(e);
+    }
+  }
+  
+  void handleError(PlatformException e) {
+    switch (e.code) {
+      case 'auth_failed':
+        print('Authentication failed');
+        break;
+      case 'not_available':
+        print('Biometric authentication not available');
+        break;
+      case 'user_cancel':
+        print('User cancelled authentication');
+        break;
+      default:
+        print('Error: ${e.code} - ${e.message}');
+    }
+  }
+}
+```
+
+## 🔍 Error Handling
+
+Common error codes:
+
+| Code | Description |
+|------|-------------|
+| `auth_failed` | Authentication failed |
+| `not_available` | Biometric authentication not available |
+| `user_cancel` | User cancelled authentication |
+| `key_not_found` | Key not found in keystore |
+| `biometric_changed` | Biometric enrollment has changed |
+
+## 🔒 Security Considerations
+
+1. **Key Storage**: Private keys are stored in platform-specific secure storage
+2. **Biometric Protection**: Keys require biometric authentication to use
+3. **Change Detection**: Keys become invalid when biometric data changes
+4. **Platform Security**: Leverages Android Keystore and iOS Secure Enclave
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 💖 Support the Project
+
+If you find this package helpful, please consider supporting it:
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/prongbang)
+
+## 🔗 Related Projects
+
+- [Android Biometric Signature](https://github.com/prongbang/android-biometric-signature)
+- [SignatureBiometricSwift](https://github.com/prongbang/SignatureBiometricSwift)
+
+---

@@ -1,3 +1,7 @@
+## 1.0.13
+
+* Migrate to Swift Package Manager
+
 ## 1.0.12
 
 * Check biometric changed for iOS

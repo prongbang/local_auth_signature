@@ -14,7 +14,8 @@ Generate key pair and signing using Local Authentication for Android and iOS.
   s.license          = { :file => '../LICENSE' }
   s.author           = 'prongbang'
   s.source           = { :path => '.' }
-  s.source_files     = 'Classes/**/*'
+  s.source_files     = 'Classes/**/*.{h,m}', 'local_auth_signature/Sources/local_auth_signature/**/*.swift'
+  s.public_header_files = 'Classes/**/*.h'
   s.dependency       'Flutter'
   s.dependency       'SignatureBiometricSwift', '~> 1.0.10'
   s.platform         = :ios, '11.0'

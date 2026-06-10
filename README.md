@@ -24,7 +24,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  local_auth_signature: ^1.0.12
+  local_auth_signature: ^1.0.13
 ```
 
 Then run:

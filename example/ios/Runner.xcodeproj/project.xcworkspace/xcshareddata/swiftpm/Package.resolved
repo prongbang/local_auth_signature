@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "signaturebiometricswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/prongbang/SignatureBiometricSwift.git",
+      "state" : {
+        "revision" : "cf8bd87b95b02d76fbae45cc26d7a11ccfcb83ff",
+        "version" : "1.0.10"
+      }
+    }
+  ],
+  "version" : 2
+}
